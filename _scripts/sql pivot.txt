@@ -1,0 +1,98 @@
+USE TrafficDB;
+IF OBJECT_ID('dbo.sp_pivot', 'P') IS NOT NULL DROP PROC dbo.sp_pivot;
+GO
+
+CREATE PROC dbo.sp_pivot
+	@query 		AS NVARCHAR(MAX), 	-- The query, or a table/view name.
+	@on_rows 	AS NVARCHAR(MAX), 	-- The columns that will be regular rows.
+	@on_cols 		AS NVARCHAR(MAX), 	-- The columns that are to be pivoted.
+	@agg_func 	AS NVARCHAR(257) = N'MAX', -- Aggregate function.
+	@agg_col 		AS NVARCHAR(MAX), 	-- Column to aggregate.
+	@debug 		AS BIT = 1 				-- Statement will be printed if 1.
+AS
+
+-- Input validation
+IF @query IS NULL OR @on_rows IS NULL OR @on_cols IS NULL
+	OR @agg_func IS NULL OR @agg_col IS NULL
+BEGIN
+	RAISERROR('Invalid input parameters.', 16, 1);
+	RETURN;
+END
+
+BEGIN TRY
+	DECLARE
+		@sql 			AS NVARCHAR(MAX),
+		@cols 		AS NVARCHAR(MAX),
+		@newline 	AS NVARCHAR(2);
+
+	SET @newline = NCHAR(13) + NCHAR(10);
+	
+	-- If input is a valid table or view
+	-- construct a SELECT statement against it
+	IF COALESCE(OBJECT_ID(@query, N'U'),
+						OBJECT_ID(@query, N'V')) IS NOT NULL
+		SET @query = N'SELECT * FROM ' + @query;
+		
+	-- Make the query a derived table
+	SET @query = N'(' + @query + N') AS Query';
+	
+	-- Handle * input in @agg_col
+	IF @agg_col = N'*' SET @agg_col = N'1';
+	
+	-- Construct column list
+	SET @sql =
+		N'SET @result = ' 									+ @newline +
+		N' STUFF(' 											+ @newline +
+		N' (SELECT N'','' + QUOTENAME('
+			+ 'CAST(pivot_col AS sysname)' +
+			+ ') AS [text()]' 									+ @newline +
+		N' FROM (SELECT DISTINCT('
+			+ @on_cols + N') AS pivot_col' 			+ @newline +
+		N' FROM' + @query + N') AS DistinctCols' 	+ @newline +
+		N' ORDER BY pivot_col' 							+ @newline +
+		N' FOR XML PATH(''''), TYPE)'
+			+ N'.value(''.[1]'', ''VARCHAR(MAX)'')' 	+ @newline +
+		N' ,1, 1, N'''');'
+		
+	IF @debug = 1 PRINT @sql;
+
+	EXEC sp_executesql
+		@stmt 		= @sql,
+		@params 	= N'@result AS NVARCHAR(MAX) OUTPUT',
+		@result 		= @cols OUTPUT;
+	
+	-- Create the PIVOT query
+	SET @sql =
+		N'SELECT *' 													+ @newline +
+		N'FROM (SELECT '
+						+ @on_rows
+						+ N', ' + @on_cols + N' AS pivot_col'
+						+ N', ' + @agg_col + N' AS agg_col' 	+ @newline +
+		N' 		FROM ' + @query + N')' +
+						+ N' AS PivotInput' 						+ @newline +
+		N' PIVOT(' + @agg_func + N'(agg_col)' 			+ @newline +
+		N' 	FOR pivot_col IN(' + @cols + N')) AS PivotOutput;'
+		
+	IF @debug = 1 PRINT @sql;
+	
+	EXEC sp_executesql @sql;
+	
+END TRY
+BEGIN CATCH
+	DECLARE
+		@error_message AS NVARCHAR(2047),
+		@error_severity 	AS INT,
+		@error_state 		AS INT;
+		
+	SET @error_message 	= ERROR_MESSAGE();
+	SET @error_severity 	= ERROR_SEVERITY();
+	SET @error_state 		= ERROR_STATE();
+	
+	RAISERROR(@error_message, @error_severity, @error_state);
+	
+	RETURN;
+END CATCH
+GO
+	
+	
+	

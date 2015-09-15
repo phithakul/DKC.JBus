@@ -1,0 +1,65 @@
+http://stackoverflow.com/questions/2881024/t-sql-get-selected-value-of-stored-procedure
+
+
+there are three ways you can use: the RETURN value, and OUTPUT parameter and a result set
+
+ALSO, watch out if you use the pattern:  SELECT @Variable=column FROM table ...
+
+if there are multiple rows returned from the query, your @Variable will only contain the value from the last row returned by the query.
+
+RETURN VALUE
+since your query returns an int field, at least based on how you named it. you can use this trick:
+
+CREATE PROCEDURE GetMyInt
+( @Param int)
+AS
+DECLARE @ReturnValue int
+
+SELECT @ReturnValue=MyIntField FROM MyTable WHERE MyPrimaryKeyField = @Param
+RETURN @ReturnValue
+GO
+and now call your procedure like:
+
+DECLARE @SelectedValue int
+       ,@Param         int
+SET @Param=1
+EXEC @SelectedValue = GetMyInt @Param
+PRINT @SelectedValue
+this will only work for INTs, because RETURN can only return a single int value and nulls are converted to a zero.
+
+OUTPUT PARAMETER
+you can use an output parameter:
+
+CREATE PROCEDURE GetMyInt
+( @Param     int
+ ,@OutValue  int OUTPUT)
+AS
+SELECT @OutValue=MyIntField FROM MyTable WHERE MyPrimaryKeyField = @Param
+RETURN 0
+GO
+and now call your procedure like:
+
+DECLARE @SelectedValue int
+       ,@Param         int
+SET @Param=1
+EXEC GetMyInt @Param, @SelectedValue OUTPUT
+PRINT @SelectedValue 
+Output parameters can only return one value, but can be any data type
+
+RESULT SET for a result set make the procedure like:
+
+CREATE PROCEDURE GetMyInt
+( @Param     int)
+AS
+SELECT MyIntField FROM MyTable WHERE MyPrimaryKeyField = @Param
+RETURN 0
+GO
+use it like:
+
+DECLARE @ResultSet table (SelectedValue int)
+DECLARE @Param int
+SET @Param=1
+INSERT INTO @ResultSet (SelectedValue)
+    EXEC GetMyInt @Param
+SELECT * FROM @ResultSet 
+result sets can have many rows and many columns of any data type

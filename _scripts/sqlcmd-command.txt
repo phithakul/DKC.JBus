@@ -1,0 +1,3 @@
+The -S switch is for the Server name and is the same one we use to connect using SSMS GUI. Connect to server option. In my case, it is DALVI2\SQLSERVER2012.
+The -E switch is used for trusted connection.
+The -i switch is for .sql script file name.

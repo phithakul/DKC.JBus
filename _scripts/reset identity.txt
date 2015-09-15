@@ -1,0 +1,2 @@
+DBCC CHECKIDENT ('[TestTable]', RESEED, 0)
+DBCC CHECKIDENT ('[PersonInfos]', RESEED, 0)

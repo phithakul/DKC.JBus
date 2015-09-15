@@ -1,0 +1,3 @@
+// removes all log entries more than 90 days old.
+DELETE FROM [ELMAH_Error]
+WHERE TimeUtc < DATEADD(d, -90, getdate())
