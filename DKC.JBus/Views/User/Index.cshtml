@@ -1,0 +1,371 @@
+﻿@model IEnumerable<DKC.JBus.Models.User>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag._UserType = UserType.Admin;
+    ViewBag._Title = "User - Admin | เมืองไทยประกันชีวิต";
+    ViewBag._MainMenu = "User";
+    ViewBag._PageTitle = "User";
+}
+@section modal
+{
+<div class="modal" id="md1_dlg" tabindex="-1" data-backdrop="static" data-keyboard="false" data-attention-animation="false" role="dialog" aria-labelledby="md1_title" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" aria-label="Close"></button>
+        <h4 class="modal-title" id="md1_title"></h4>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" id="model_form" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="id" name="id" value="">
+            <input type="hidden" name="SetPassword" value="true">
+            <div class="form-group">
+                <label for="Username" class="control-label col-sm-4">รหัสผู้ใช้</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="Username" name="Username" maxlength="50" autocomplete="off" autofocus>
+                    <span class="field-validation-error text-danger" data-valmsg-for="Username" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="UserType" class="control-label col-sm-4">ประเภทผู้ใช้</label>
+                <div class="col-sm-6">
+                    @Html.DropDownList("UserType", (IEnumerable<SelectListItem>)ViewBag._UserTypeItems, "", new { @class = "form-control" })
+                    <span class="field-validation-error text-danger" data-valmsg-for="UserType" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="Email" class="control-label col-sm-4">อีเมล์</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="Email" name="Email" maxlength="100" autocomplete="off">
+                    <span class="field-validation-error text-danger" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="Password1" class="control-label col-sm-4">รหัสผ่าน</label>
+                <div class="col-sm-6">
+                    <input type="password" class="form-control" id="Password1" name="Password1" maxlength="30" autocomplete="off">
+                    <span class="field-validation-error text-danger" data-valmsg-for="Password1" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="Password2" class="control-label col-sm-4">ใส่รหัสผ่านอีกครั้ง</label>
+                <div class="col-sm-6">
+                    <input type="password" class="form-control" id="Password2" name="Password2" maxlength="30" autocomplete="off">
+                    <span class="field-validation-error text-danger" data-valmsg-for="Password2" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="text-center">
+            <button class="btn pink" id="md1_ok" data-id="" data-loading-text=" ตกลง " type="button"> ตกลง </button>
+            <button class="btn default" id="md1_cancel" data-dismiss="modal" data-loading-text=" ยกเลิก " type="button"> ยกเลิก </button>
+        </div>
+    </div>
+</div>
+<div class="modal" id="md2_dlg" tabindex="-1" data-backdrop="static" data-keyboard="false" data-attention-animation="false" role="dialog" aria-labelledby="md2_title" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" aria-label="Close"></button>
+        <h4 class="modal-title" id="md2_title"></h4>
+    </div>
+    <div class="modal-body" id="md2_msg">
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" id="confirm_ids" value="">
+        <div class="alert alert-danger alert-dismissible text-left" role="alert" id="md2_alert_error">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+            <span id="md2_alert_error_msg"></span>
+        </div>
+        <div class="text-center">
+            <button class="btn pink" id="md2_ok" data-loading-text=" ตกลง " type="button"> ตกลง </button>
+            <button class="btn default" id="md2_cancel" data-dismiss="modal" data-loading-text=" ยกเลิก " type="button"> ยกเลิก </button>
+        </div>
+    </div>
+</div>
+}
+<div class="portlet">
+    <div class="portlet-title title-custom">
+        <div class="caption font-pink">
+            @ViewBag._PageTitle
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn pink" role="button" href="javascript:;" id="btn_create">
+                    <i class="fa fa-plus"></i> เพิ่ม@(ViewBag._PageTitle)
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="table-container">
+            <div class="row ss-table-filter-bar">
+                <div class="col-md-8 col-sm-12">
+                    @using (Html.BeginForm(null, null, FormMethod.Get, new { id = "searchForm", role = "form", autocomplete = "off" }))
+                    {
+                        <div class="input-group searchBox">
+                            <input type="text" class="form-control" placeholder="รหัสหรือชื่อผู้ใช้..." id="searchString" name="searchString" value="@(ViewBag._CurrentFilter as string)">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn pink"><i class="icon-magnifier"></i></button>
+                            </span>
+                        </div>
+                    }
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <div class="table-group-actions pull-right">
+                    </div>
+                </div>
+            </div>
+            <div class="row ss-table-action-bar">
+                <div class="col-md-12">
+                    <button class="btn btn-sm btn-default pull-left" id="btn_delete">
+                        <i class="fa fa-trash-o"></i> ลบ
+                    </button>
+                    <div class="ss-action-header pull-right">
+                        <a href="javascript:;" class="btn btn-icon-only font-blue-steel" id="export_excel" title="บันทึกเป็น Excel">
+                            <i class="fa fa-file-excel-o" style="font-size: 22px;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-condensed table-striped table-bordered table-hover ss-table-pager" id="model_table">
+                    <thead>
+                        <tr>
+                            <th class="ss-select"><input type="checkbox" class="ss-group-checkbox"></th>
+                            <th>รหัสผู้ใช้</th>
+                            <th>ประเภทผู้ใช้</th>
+                            <th>อีเมล์</th>
+                            <th>สถานะ</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr id="tr_@(item.Id)" data-id="@(item.Id)">
+                                <td class="ss-select"><input class="ss-checkboxes" type="checkbox"></td>
+                                <td>
+                                    @Html.ActionLink(item.Username, "Edit", new { id = item.Id })
+                                </td>
+                                <td>@item.UserType</td>
+                                <td>@item.Email</td>
+                                <td>
+                                    @if (item.Active)
+                                    { <span class="label label-sm bg-blue-mtl">Active</span> }
+                                    else
+                                    { <span class="label label-sm bg-gray-mtl">Inactive</span> }
+                                </td>
+                                <td><btn href="javascript:;" class="btn btn-sm btn-default login-as">Login</btn></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="ss-pager-bottom-panel col-md-12">
+                    <div class="ss-table-summary pull-left"><strong>@string.Format("{0:#,##0}", @Model.Count())</strong> รายการ</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section js
+{
+<script>
+    $(document).ready(function () {
+        var $md1_dlg = $('#md1_dlg');
+        var $md1_title = $('#md1_title');
+        var $model_form = $('#model_form');
+        var token = $('input[name="__RequestVerificationToken"]', $model_form).val();
+
+        var $username = $('#Username');
+        var $userType = $('#UserType');
+        var $email = $('#Email');
+        var $password1 = $('#Password1');
+        var $password2 = $('#Password2');
+        var $md1_ok = $('#md1_ok');
+        var $md1_cancel = $('#md1_cancel');
+        var $table = $('#model_table');
+
+        $('#export_excel').on('click', function () {
+            window.location = '@Url.Action("Index", "User", null, this.Request.Url.Scheme)?download=xlsx&searchString=@(ViewBag._CurrentFilter as string)';
+            return false;
+        });
+
+        $('#btn_create').on('click', function (e) {
+            e.preventDefault();
+            $model_form.find('span[data-valmsg-for]').text('');
+            $md1_title.text('เพิ่ม User');
+            $username.val('');
+            $userType.prop('selectedIndex', 0);
+            $email.val('');
+            $password1.val('');
+            $password2.val('');
+            $md1_ok.button('reset');
+            $md1_cancel.button('reset');
+            $md1_dlg.modal('show');
+            $username.focus();
+        });
+
+        $md1_ok.on('click', function (event) {
+            event.preventDefault();
+            $md1_ok.button('loading');
+            $md1_cancel.button('loading');
+
+            $.ajax({
+                type: 'POST',
+                url: '@(Url.Action("Create", "User"))',
+                data: $model_form.serialize(),
+                success: function (res) {
+                    if (res.Error) {
+                        window.location.href = res.LogOnUrl;
+                        return false;
+                    }
+                    if (res.success) {
+                        var item = res.data;
+                        var url = res.url;
+                        var label;
+                        if (item.Active == 'True') {
+                            label = '<span class="label label-sm bg-blue-mtl">Active</span>';
+                        } else {
+                            label = '<span class="label label-sm bg-gray-mtl">Inactive</span>';
+                        }
+                        var rowData = '<tr id="tr_' + item.Id + '" data-id="' + item.Id + '">'
+                            + '<td class="ss-select"><input class="ss-checkboxes" type="checkbox"></td>'
+                            + '<td><a class="edit" href="' + url + '">' + item.Username + '</a></td><td>'
+                            + item.UserType + '</td><td>'
+                            + item.Email + '</td><td>'
+                            + label + '</td></tr>';
+
+                        $(rowData).prependTo('#model_table tbody')
+                            .addClass('warning').delay(1000).queue(function () {
+                                $(this).removeClass('warning').dequeue();
+                            });
+                        $md1_dlg.modal('hide');
+                    } else {
+                        $model_form.find('span[data-valmsg-for]').text('');
+                        $.each(res.errors, function (key, value) {
+                            $model_form.find('span[data-valmsg-for="' + key + '"]').text(value);
+                        });
+                        $md1_ok.button('reset');
+                        $md1_cancel.button('reset');
+                    }
+                },
+                error: function (res) {
+                    alert(res.responseText);
+                    $md1_dlg.modal('hide');
+                }
+            });
+        });
+
+        $table.find('.ss-group-checkbox').change(function () {
+            var checked = $(this).is(":checked");
+            $table.find('.ss-checkboxes').each(function () {
+                if (checked) {
+                    $(this).prop('checked', true);
+                    $(this).parents('tr').addClass("active");
+                } else {
+                    $(this).prop("checked", false);
+                    $(this).parents('tr').removeClass("active");
+                }
+            });
+        });
+
+        $table.on('change', 'tbody .ss-checkboxes', function () {
+            $(this).parents('tr').toggleClass("active");
+        });
+
+        var $md2_dlg = $('#md2_dlg');
+        var $md2_title = $('#md2_title');
+        var $md2_msg = $('#md2_msg');
+        var $md2_alert_error = $('#md2_alert_error');
+        var $md2_alert_error_msg = $('#md2_alert_error_msg');
+        var $md2_ok = $('#md2_ok');
+        var $md2_cancel = $('#md2_cancel');
+        var $confirm_ids = $('#confirm_ids');
+
+        $('#btn_delete').on('click', function (e) {
+            e.preventDefault();
+            var selectIDs = new Array();
+            $tr_checkeds = $table.find('tbody tr').has("input:checked");
+            if ($tr_checkeds.length > 0) {
+                $tr_checkeds.each(function () {
+                    selectIDs.push($(this).data('id'));
+                });
+                confirmDialog('ยืนยันลบข้อมูล', 'ต้องการลบข้อมูลจำนวน ' + $tr_checkeds.length + ' รายการ ?', selectIDs);
+            }
+        });
+
+        var confirmDialog = function (tltle, msg, ids) {
+            $md2_ok.button('reset');
+            $md2_cancel.button('reset');
+            $md2_title.text(tltle);
+            $md2_msg.text(msg);
+            $md2_alert_error.addClass('hidden');
+            $confirm_ids.val(ids);
+            $md2_dlg.modal('show');
+        };
+
+        $md2_ok.on('click', function (e) {
+            e.preventDefault();
+            $md2_ok.button('loading');
+            $md2_cancel.button('loading');
+
+            $.ajax({
+                type: 'POST',
+                url: '@(Url.Action("Delete", "User"))',
+                data: {
+                    __RequestVerificationToken: token,
+                    ids: $confirm_ids.val()
+                }
+            })
+            .done(function (res) {
+                if (res.Error) {
+                    window.location.href = res.LogOnUrl;
+                    return false;
+                }
+                if (res.success) {
+                    $md2_dlg.modal('hide');
+                    window.location.href = window.location.href; // similar behavior as clicking on a link
+                } else {
+                    $md2_alert_error_msg.text(res.message);
+                    $md2_alert_error.removeClass('hidden');
+                    $md2_ok.button('reset');
+                    $md2_cancel.button('reset');
+                }
+            })
+            .fail(function (jqXHR, textStatus) {
+                alert(textStatus);
+                $md2_ok.button('reset');
+                $md2_cancel.button('reset');
+            });
+        });
+
+        $table.on('click', 'btn.login-as', function (e) {
+            e.preventDefault();
+            var id = $(this).closest('tr')
+            $.ajax({
+                type: 'POST',
+                url: '@(Url.Action("LoginAs", "Account"))',
+                data: {
+                    __RequestVerificationToken: token, 
+                    id: $(this).closest('tr').data('id')
+                }
+            })
+            .done(function (res) {
+                if (res.Error) {
+                    window.location.href = res.LogOnUrl;
+                    return false;
+                }
+                if (res.success) {
+                    window.location.href = res.url;
+                } else {
+                    alert(res.message);
+                }
+            })
+            .fail(function (jqXHR, textStatus) {
+                alert(textStatus);
+            });
+        });
+    });
+</script>
+}

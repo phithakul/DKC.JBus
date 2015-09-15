@@ -1,0 +1,54 @@
+/*@import url("font.css");*/
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+p {
+  font-weight: normal;
+  line-height: 1.5;
+  padding: 0;
+  margin: 0;
+}
+
+.page-error {
+  width: 30%;
+  margin: 10% auto;
+  text-align: center;
+  color: #8f8f8f;
+  font-size: 20px;
+}
+
+  .page-error h1 {
+    color: #393939;
+    font-size: 35px;
+    font-family: 'prata-regular';
+    margin-bottom: 40px;
+  }
+
+  .page-error p {
+    margin-bottom: 10px;
+    color: #8f8f8f;
+  }
+
+  .page-error .head {
+    font-size: 30px;
+    color: #717171;
+  }
+
+  .page-error a.btn {
+    margin-top: 40px;
+    display: inline-block;
+    padding: 10px 32px;
+    text-decoration: none;
+    background: #f0027f;
+    color: #FFF;
+    font-size: 14px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+  }
+
+    .page-error a.btn:hover {
+      background: #f0027f;
+    }

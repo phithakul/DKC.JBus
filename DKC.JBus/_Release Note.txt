@@ -1,0 +1,4 @@
+﻿DKC.JBus - Release Notes
+
+v2558.09.15.0
+- Initial Release

@@ -1,0 +1,116 @@
+﻿@model DKC.JBus.ViewModels.UserViewModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag._UserType = UserType.Admin;
+    ViewBag._Title = "User - Admin | เมืองไทยประกันชีวิต";
+    ViewBag._MainMenu = "User";
+    ViewBag._PageTitle = "User";
+    var action = ViewContext.RouteData.Values["action"].ToString();
+    ViewBag._PageTitle = (action == "Create") ? "เพิ่ม User" : "แก้ไข User";
+}
+<!-- BEGIN PAGE CONTENT-->
+<div class="portlet light bg-inverse">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="caption-subject caption-page-title font-pink bold uppercase">@ViewBag._PageTitle</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <!-- BEGIN FORM-->
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal", autocomplete = "off" }))
+        {
+            <div class="form-body">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Username, "รหัสผู้ใช้", new { @class = "control-label col-md-3" })
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", maxlength = "50", autocomplete = "off", required = "", autofocus = "" } })
+                        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserType, "ประเภทผู้ใช้", new { @class = "control-label col-md-3" })
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(model => model.UserType, Model.UserTypeItems, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.UserType, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, "อีเมล์", new { @class = "control-label col-md-3" })
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", maxlength = "100", autocomplete = "off" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Active, "สถานะ", new { @class = "control-label col-md-3" })
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <div class="icheck-inline">
+                                <label>@Html.RadioButtonFor(model => model.Active, "true", new { id = "Active", @class = "icheck", data_radio = "iradio_minimal" }) Active</label>
+                                <label>@Html.RadioButtonFor(model => model.Active, "false", new { id = "InActive", @class = "icheck", data_radio = "iradio_minimal" }) Inactive</label>
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("", "รหัสผ่าน", new { @class = "control-label col-md-3" })
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <div class="icheck-inline">
+                                <label>@Html.CheckBoxFor(model => model.SetPassword, new { @class = "icheck", data_radio = "icheckbox_minimal" }) เลือกเพื่อแก้ไขรหัสผ่าน</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="pwset" class="@(Model.SetPassword ? "" : "hidden")">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Password1, "รหัสผ่าน", new { @class = "control-label col-md-3" })
+                        <div class="col-md-6">
+                            @Html.PasswordFor(model => model.Password1, new { @class = "form-control", maxlength = "30", autocomplete = "off" })
+                            @Html.ValidationMessageFor(model => model.Password1, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Password2, "ใส่รหัสผ่านอีกครั้ง", new { @class = "control-label col-md-3" })
+                        <div class="col-md-6">
+                            @Html.PasswordFor(model => model.Password2, new { @class = "form-control", maxlength = "30", autocomplete = "off" })
+                            @Html.ValidationMessageFor(model => model.Password2, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-6">
+                        <input type="submit" value=" บันทึก " class="btn pink" />
+                        <a class="btn default" href="@Url.Action("Index", "User", null, this.Request.Url.Scheme)" role="button"> ยกเลิก </a>
+                    </div>
+                </div>
+            </div>
+        }
+        <!-- END FORM-->
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
+@section js
+{
+<script>
+    $(document).ready(function () {
+        Metronic.init();
+        Layout.init();
+
+        $pwset = $('#pwset');
+                
+        $('#SetPassword').on('ifChanged', function (e) {
+            $pwset.toggleClass('hidden');
+            return false;
+        });
+
+        $('.input-validation-error').parents('.form-group').addClass('has-error');
+    });
+</script>
+}
