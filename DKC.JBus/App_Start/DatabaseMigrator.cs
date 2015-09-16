@@ -1,4 +1,5 @@
-﻿using Migrator;
+﻿using DKC.JBus.Constants;
+using Migrator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace DKC.JBus
         {
             var config = new Config
             {
-                ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AppConnection"].ConnectionString,
+                ConnectionString = Application.ConnectionStrings,
                 MigrationPath = System.Web.Hosting.HostingEnvironment.MapPath("~/Migrations"),
                 Force = true,
                 CommandTimeout = 5 * 60

@@ -14,8 +14,10 @@ namespace DKC.JBus.Constants
 
         private static int _ticketTimeout = Int32.Parse(ConfigurationManager.AppSettings["EXPIRED_LOGIN_MINUTE"]);
         private static bool _isLoginViaLdap = (ConfigurationManager.AppSettings["LOGIN_VIA_LDAP"].ToString().ToLower() == "true");
+        private static string _connectionStrings = ConfigurationManager.ConnectionStrings["AppConnection"].ConnectionString;
 
         public static int TicketTimeout { get { return _ticketTimeout; } }
         public static bool IsLoginViaLdap { get { return _isLoginViaLdap; } }
+        public static string ConnectionStrings { get { return _connectionStrings; } }
     }
 }

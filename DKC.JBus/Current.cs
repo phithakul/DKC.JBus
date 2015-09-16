@@ -1,4 +1,5 @@
-﻿using DKC.JBus.Controllers;
+﻿using DKC.JBus.Constants;
+using DKC.JBus.Controllers;
 using DKC.JBus.Models;
 using System;
 using System.Collections.Generic;
@@ -76,7 +77,7 @@ namespace DKC.JBus
 
                 if (result == null)
                 {
-                    DbConnection cnn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["AppConnection"].ConnectionString);
+                    DbConnection cnn = new SqlConnection(Application.ConnectionStrings);
                     //if (Current.Profiler != null)
                     //    cnn = new StackExchange.Profiling.Data.ProfiledDbConnection(cnn, new ErrorLoggingProfiler(Current.Profiler));
                     cnn.Open();
