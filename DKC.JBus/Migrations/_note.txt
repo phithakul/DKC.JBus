@@ -1,0 +1,2 @@
+﻿- กำหนด
+Copy to Output Directory: Copy always
