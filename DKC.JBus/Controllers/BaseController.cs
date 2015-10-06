@@ -1,4 +1,4 @@
-﻿using DKC.JBus.Models;
+﻿using DKC.JBus.Domains;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -111,7 +111,6 @@ namespace DKC.JBus.Controllers
         private static User GetCurrentUser(bool isAuthenticated, string userHostAddress, string identity)
         {
             var user = new User();
-            user.IsAnonymous = true;
 
             if (isAuthenticated)
             {
@@ -122,7 +121,6 @@ namespace DKC.JBus.Controllers
                     if (lookup != null)
                     {
                         user = lookup;
-                        user.IsAnonymous = false;
                     }
                 }
                 else

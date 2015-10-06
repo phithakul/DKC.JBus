@@ -1,7 +1,7 @@
 ﻿using DKC.JBus.Helpers;
 using DKC.JBus.Infrastructure;
+using DKC.JBus.Domains;
 using DKC.JBus.Models;
-using DKC.JBus.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

@@ -1,1 +1,1 @@
-DROP DATABASE MtlTraining;
+DROP DATABASE JBus;

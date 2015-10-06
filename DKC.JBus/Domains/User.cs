@@ -1,7 +1,8 @@
 ﻿using Dapper;
 using DKC.JBus.Constants;
 using DKC.JBus.Helpers;
-using DKC.JBus.ViewModels;
+using DKC.JBus.Helpers.Security;
+using DKC.JBus.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,49 +12,30 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 
-namespace DKC.JBus.Models
+namespace DKC.JBus.Domains
 {
     public enum UserType
     {
         None = 0,
         Admin = 1,
         Manager = 2,
-        Officer = 3,
+        Staff = 3,
         Customer = 4
     }
 
     public class User
     {
         public int Id { get; set; }
-
         public string Username { get; set; }
-
-        public string Hash { get; set; }
-
         public UserType UserType { get; set; }
-
         public string FullName { get; set; }
+        public string MemberType { get; set; }
+        public string Department { get; set; }
+        public string Section { get; set; }
         public string MobileNo { get; set; }
-
         public string Email { get; set; }
-
-        public bool Active { get; set; }
-
-        public DateTime CreatedDate { get; set; }
-
-        public DateTime UpdatedDate { get; set; }
-
+        public DateTime CreationDate { get; set; }
         public DateTime LastActivityDate { get; set; }
-
-        public bool IsAnonymous { get; set; }
-
-        public string ActiveText
-        {
-            get
-            {
-                return Active ? "ใช้งาน" : "ไม่ใช้งาน";
-            }
-        }
 
         public string UserInfo
         {
@@ -63,14 +45,37 @@ namespace DKC.JBus.Models
             }
         }
 
-        public string Password
-        {
-            set { Hash = Crypto.HashPassword(value); }
-        }
-
         public bool IsAdmin
         {
             get { return UserType == UserType.Admin; }
+        }
+
+        public bool IsCustomer
+        {
+            get { return UserType == UserType.Customer; }
+        }
+
+        public static User CreateLoginUser(User user)
+        {
+            user.UserType = UserType.Customer; // ใช้ insert อย่างเดียว
+            user.CreationDate = DateTime.Now;
+            user = Current.DB.Query<User>(@"
+begin tran
+  update Users with (serializable)
+  set
+      FullName     = @FullName,
+      MemberType   = @MemberType,
+      Department   = @Department,
+      Section      = @Section
+   where Username = @Username
+   if @@rowcount = 0
+   begin
+      insert Users (Username,UserType,FullName,MemberType,Department,Section,CreationDate)
+      values (@Username,@UserType,@FullName,@MemberType,@Department,@Section,@CreationDate)
+   end
+   select * FROM Users WHERE Username = @Username
+commit tran", user).Single();
+            return user;
         }
 
         public static void Create(User model, out bool foundDup)
@@ -78,18 +83,14 @@ namespace DKC.JBus.Models
             foundDup = false;
             try
             {
-                model.CreatedDate = DateTime.Now;
-                model.UpdatedDate = DateTime.Now;
+                model.CreationDate = DateTime.Now;
                 model.Id = (int)Current.DB.Users.Insert(
                     new
                     {
                         model.Username,
-                        model.Hash,
                         model.UserType,
                         model.Email,
-                        model.Active,
-                        CreatedDate = model.CreatedDate,
-                        UpdatedDate = model.UpdatedDate
+                        model.CreationDate,
                     });
             }
             catch (SqlException ex)
@@ -117,16 +118,10 @@ namespace DKC.JBus.Models
             updateModel.Username = model.Username;
             updateModel.UserType = model.UserType;
             updateModel.Email = model.Email;
-            updateModel.Active = model.Active;
-            if (!model.Hash.IsNullOrEmpty())
-            {
-                updateModel.Hash = model.Hash;
-            }
 
             var diff = snapshot.Diff();
             if (diff.ParameterNames.Any())
             {
-                updateModel.UpdatedDate = DateTime.Now;
                 try
                 {
                     Current.DB.Users.Update(updateModel.Id, diff);
@@ -150,12 +145,6 @@ namespace DKC.JBus.Models
         public static void Delete(string ids)
         {
             Current.DB.Execute("delete from Users where Id in (" + ids + ")");
-        }
-
-        public static User Authenticate(string username, string password, out string errorMsg)
-        {
-            errorMsg = "";
-            return null;
         }
 
         public static IEnumerable<User> GetList(bool? isAgent = null, string name = null)

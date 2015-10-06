@@ -1,4 +1,4 @@
-using DKC.JBus.Models;
+using DKC.JBus.Domains;
 using NIGateway;
 using System;
 using System.Threading.Tasks;

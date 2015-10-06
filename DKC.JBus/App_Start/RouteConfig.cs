@@ -48,6 +48,38 @@ namespace DKC.JBus
                 namespaces: new[] { "DKC.JBus.Controllers" }
             );
 
+            // domain ----------------------------------------------------------
+            routes.MapRoute(
+                name: null,
+                url: "requests/{action}/{id}",
+                defaults: new { controller = "BusRequest", action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "DKC.JBus.Controllers" }
+            );
+            routes.MapRoute(
+                name: null,
+                url: "orders/{action}/{id}",
+                defaults: new { controller = "BusOrder", action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "DKC.JBus.Controllers" }
+            );
+            routes.MapRoute(
+                name: null,
+                url: "payments/{action}/{id}",
+                defaults: new { controller = "Payment", action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "DKC.JBus.Controllers" }
+            );
+            routes.MapRoute(
+                name: null,
+                url: "paymentgroups/{action}/{id}",
+                defaults: new { controller = "PaymentGroup", action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "DKC.JBus.Controllers" }
+            );
+            routes.MapRoute(
+                name: null,
+                url: "busoperators/{action}/{id}",
+                defaults: new { controller = "BusOperator", action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "DKC.JBus.Controllers" }
+            );
+
             // admin ----------------------------------------------------------
             routes.MapRoute(
                 name: null,

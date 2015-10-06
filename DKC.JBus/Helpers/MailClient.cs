@@ -1,4 +1,4 @@
-using DKC.JBus.Models;
+using DKC.JBus.Domains;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

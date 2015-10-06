@@ -3,24 +3,22 @@ BEGIN
 	CREATE TABLE [dbo].[Users]
 	(
 		Id			int 		not null identity,
-		Username		nvarchar(50) 	not null,
-		Hash			nvarchar(100)	null,		
+		Username		nvarchar(50) 	not null,		
 		UserType		int				not null,
-		FullName		nvarchar(100)	null,
-		MobileNo 		nvarchar(10) 	not null CONSTRAINT [DF_Users_MobileNo]  DEFAULT (''),
-		Email			nvarchar(100)	not null CONSTRAINT [DF_Users_Email]  DEFAULT (''),
-		Active	 		bit 			not null CONSTRAINT DFT_Users_Active DEFAULT(1),
-		CreatedDate		datetime		not null CONSTRAINT DFT_Users_CreatedDate DEFAULT(GETDATE()),
-		UpdatedDate		datetime		not null CONSTRAINT DFT_Users_UpdatedDate DEFAULT(GETDATE()),
-		LastActivityDate		datetime		not null CONSTRAINT DFT_Users_LastActivityDate DEFAULT(GETDATE()),
+		FullName		nvarchar(100)	not null,
+		MemberType		nvarchar(20)	not null,
+		Department		nvarchar(50)	not null,
+		Section			nvarchar(50)	not null,
+		MobileNo 		nvarchar(10) 	null,
+		Email			nvarchar(100)	null,
+		CreationDate	datetime		not null,		
+		LastActivityDate	datetime		null,
 		CONSTRAINT PK_Users PRIMARY KEY(Id)
 	);
 	CREATE UNIQUE INDEX UX_Username ON [dbo].[Users](Username);
 
-	INSERT INTO [dbo].[Users] (Username, Hash, UserType, IsAgent) VALUES
-	(N'admin', N'AL+ZfHbpSDNonpIXk4c9eCL3Gy1SXZwyYcG6ePJIhj7tiEGS8jkRbi/rIARFetltpg==', 1, 0),
-	(N'a', N'ANkxabdXz+a/21SOmfgXJxPTqKwCmqDN8nrc2MJVW/lCdYSTSawdJ7WyN65FIQE0bA==', 3, 0),
-    (N'b', N'AGjohfkl8rPaVcbtk54lnMQeysdoVbyX0NSJMI8uMAfjrZE9NMVW22QVjGhGXaJ85Q==', 2, 0);
+	INSERT INTO [dbo].[Users] (Username,UserType,FullName,MemberType,Department,Section,CreationDate) VALUES
+	(N'vphithakul', 1, '', '', '', '', GETDATE()); -- admin
 END;
 go
 -- password = admin

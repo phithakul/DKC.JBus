@@ -16,6 +16,5 @@ BEGIN
 		ErrorMsg	nvarchar(MAX)	not null,
 		CONSTRAINT PK_MailLogs PRIMARY KEY(Id)
 	);
-	CREATE INDEX UX_ProjectType ON [dbo].[MailLogs](ProjectType);
 END
 go

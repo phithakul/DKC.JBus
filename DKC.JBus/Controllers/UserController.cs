@@ -1,7 +1,7 @@
-﻿using DKC.JBus.Helpers;
+﻿using DKC.JBus.Domains;
+using DKC.JBus.Helpers;
 using DKC.JBus.Infrastructure;
 using DKC.JBus.Models;
-using DKC.JBus.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace DKC.JBus.Controllers
         public ActionResult Index(string searchString, string download)
         {
             ViewBag._CurrentFilter = searchString;
-            var users = Models.User.GetList(false, searchString);
+            var users = Domains.User.GetList(false, searchString);
             if (download == null)
             {
                 ViewBag._UserTypeItems = GetUserTypeItems();
@@ -29,7 +29,6 @@ namespace DKC.JBus.Controllers
                 table.Columns.Add("อีเมล์", typeof(string));
                 table.Columns.Add("สถานะ", typeof(string));
                 table.Columns.Add("วันที่สร้าง", typeof(string));
-                table.Columns.Add("วันที่แก้ไข", typeof(string));
 
                 foreach (var item in users)
                 {
@@ -37,9 +36,7 @@ namespace DKC.JBus.Controllers
                         item.Username,
                         item.UserType,
                         item.Email,
-                        item.ActiveText,
-                        AppUtils.FormatReportDateTime(item.CreatedDate),
-                        AppUtils.FormatReportDateTime(item.UpdatedDate)
+                        AppUtils.FormatReportDateTime(item.CreationDate)
                     );
                 }
                 ExcelHelper.DumpXlsx(Response, table, "User_" + DateTime.Now.ToString("dd-MM-yyyy", AppUtils.ThaiCulture), "User");
@@ -56,13 +53,12 @@ namespace DKC.JBus.Controllers
             return new[] {
                 new SelectListItem { Text = UserType.Admin.ToString(), Value = ((int)UserType.Admin).ToString(), Selected = false },
                 new SelectListItem { Text = UserType.Manager.ToString(), Value = ((int)UserType.Manager).ToString(), Selected = false},
-                new SelectListItem { Text = UserType.Officer.ToString(), Value = ((int)UserType.Officer).ToString(), Selected = false },
+                new SelectListItem { Text = UserType.Staff.ToString(), Value = ((int)UserType.Staff).ToString(), Selected = false },
                 new SelectListItem { Text = UserType.Customer.ToString(), Value = ((int)UserType.Customer).ToString(), Selected = false }
             };
         }
 
         [HttpPost]
-        [HandleAntiForgeryError]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
         public ActionResult Create(UserViewModel viewModel)
@@ -70,9 +66,8 @@ namespace DKC.JBus.Controllers
             if (viewModel.IsValid(ModelState))
             {
                 var model = UserViewModel.ToModel(viewModel);
-                model.Active = true;
                 bool foundDup;
-                Models.User.Create(model, out foundDup);
+                Domains.User.Create(model, out foundDup);
                 if (!foundDup)
                 {
                     return Json(new
@@ -83,8 +78,7 @@ namespace DKC.JBus.Controllers
                             Id = model.Id.ToString(),
                             Username = model.Username,
                             UserType = model.UserType.ToString(),
-                            Email = model.Email,
-                            Active = model.Active.ToString()
+                            Email = model.Email
                         },
                         url = Url.Action("Edit", new { id = model.Id })
                     });
@@ -111,7 +105,6 @@ namespace DKC.JBus.Controllers
         }
 
         [HttpPost]
-        [HandleAntiForgeryError]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
         public ActionResult Edit(UserViewModel viewModel)
@@ -120,7 +113,7 @@ namespace DKC.JBus.Controllers
             {
                 var model = UserViewModel.ToModel(viewModel);
                 bool foundDup;
-                Models.User.Update(model, out foundDup);
+                Domains.User.Update(model, out foundDup);
                 if (!foundDup)
                 {
                     return RedirectToAction("Index");
@@ -137,11 +130,10 @@ namespace DKC.JBus.Controllers
         }
 
         [HttpPost]
-        [HandleAntiForgeryError]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(string ids)
         {
-            Models.User.Delete(ids);
+            Domains.User.Delete(ids);
             return Json(new { success = true });
         }
     }

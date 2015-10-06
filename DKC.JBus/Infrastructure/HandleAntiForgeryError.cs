@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 
 namespace DKC.JBus.Infrastructure
 {
-    public class HandleAntiForgeryError : ActionFilterAttribute, IExceptionFilter
+    public class HandleAntiForgeryError : IExceptionFilter
     {
         #region IExceptionFilter Members
 
@@ -17,7 +18,8 @@ namespace DKC.JBus.Infrastructure
             var exception = filterContext.Exception as HttpAntiForgeryException;
             if (exception != null)
             {
-                Elmah.ErrorSignal.FromCurrentContext().Raise(exception);
+                // TODO:
+                //Elmah.ErrorSignal.FromCurrentContext().Raise(exception);
 
                 if (filterContext.HttpContext.Request.IsAjaxRequest())
                 {

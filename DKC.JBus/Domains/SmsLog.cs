@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DKC.JBus.Models
+namespace DKC.JBus.Domains
 {
     public enum SmsStatus
     {

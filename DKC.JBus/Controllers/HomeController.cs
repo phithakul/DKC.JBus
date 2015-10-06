@@ -1,10 +1,11 @@
 ﻿using DKC.JBus.Infrastructure;
-using DKC.JBus.Models;
+using DKC.JBus.Domains;
+using StackExchange.Profiling;
+using System.Threading;
 using System.Web.Mvc;
 
 namespace DKC.JBus.Controllers
 {
-    [AllowAnonymous]
     public class HomeController : BaseController
     {
         public ActionResult Index()

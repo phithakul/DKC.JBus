@@ -1,9 +1,9 @@
-﻿using DKC.JBus.Helpers;
-using DKC.JBus.Models;
+﻿using DKC.JBus.Domains;
+using DKC.JBus.Helpers;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
-namespace DKC.JBus.ViewModels
+namespace DKC.JBus.Models
 {
     public class UserViewModel
     {
@@ -45,13 +45,8 @@ namespace DKC.JBus.ViewModels
                 Id = viewModel.Id.IsNullOrEmptyReturn<int>(),
                 Username = viewModel.Username,
                 UserType = (UserType)int.Parse(viewModel.UserType),
-                Email = viewModel.Email ?? "",
-                Active = viewModel.Active.IsNullOrEmptyReturn<bool>()
+                Email = viewModel.Email ?? ""
             };
-            if (viewModel.SetPassword)
-            {
-                user.Password = viewModel.Password1;
-            }
             return user;
         }
 
@@ -62,8 +57,7 @@ namespace DKC.JBus.ViewModels
                 Id = model.Id.ToString(),
                 Username = model.Username,
                 UserType = ((int)model.UserType).ToString(),
-                Email = model.Email,
-                Active = model.Active.ToString()
+                Email = model.Email
             };
         }
     }

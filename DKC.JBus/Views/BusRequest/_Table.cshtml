@@ -1,0 +1,53 @@
+﻿@model IEnumerable<BusRequest>
+<div class="table-container">
+    <div class="table-actionbar">
+        <button class="btn btn-default s-btn pull-left" id="btn_delete">
+            <i class="fa fa-trash-o"></i> ลบ
+        </button>
+        <button class="btn btn-default s-btn pull-right" id="btn_search">
+            ค้นหา
+        </button>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-condensed table-striped table-bordered table-hover ss-table-pager" id="model_table">
+            <thead>
+                <tr>
+                    <th class="ss-select"><input type="checkbox" class="ss-group-checkbox"></th>
+                    <th>@Html.ActionLink("วันที่", "Index", new { currentFilter = ViewBag._CurrentFilter, sortOrder = ViewBag._CodeSort }, new { title = "เรียงตาม" }) @InlineHelpers.OrderSign("Code", ViewBag._CurrentSort)</th>
+                    <th>@Html.ActionLink("เลขที่", "Index", new { currentFilter = ViewBag._CurrentFilter, sortOrder = ViewBag._NameSort }, new { title = "เรียงตาม" }) @InlineHelpers.OrderSign("Name", ViewBag._CurrentSort)</th>
+                    <th>@Html.ActionLink("วันเดินทาง", "Index", new { currentFilter = ViewBag._CurrentFilter, sortOrder = ViewBag._CourseTypeSort }, new { title = "เรียงตาม" }) @InlineHelpers.OrderSign("CourseType", ViewBag._CurrentSort)</th>
+                    <th>@Html.ActionLink("สถานที่ไป", "Index", new { currentFilter = ViewBag._CurrentFilter, sortOrder = ViewBag._CourseTypeSort }, new { title = "เรียงตาม" }) @InlineHelpers.OrderSign("CourseType", ViewBag._CurrentSort)</th>
+                    <th>@Html.ActionLink("ประเภท", "Index", new { currentFilter = ViewBag._CurrentFilter, sortOrder = ViewBag._CourseTypeSort }, new { title = "เรียงตาม" }) @InlineHelpers.OrderSign("CourseType", ViewBag._CurrentSort)</th>
+                    <th>@Html.ActionLink("จำนวนคัน", "Index", new { currentFilter = ViewBag._CurrentFilter, sortOrder = ViewBag._CourseTypeSort }, new { title = "เรียงตาม" }) @InlineHelpers.OrderSign("CourseType", ViewBag._CurrentSort)</th>
+                    <th>@Html.ActionLink("การชำระเงิน", "Index", new { currentFilter = ViewBag._CurrentFilter, sortOrder = ViewBag._CourseTypeSort }, new { title = "เรียงตาม" }) @InlineHelpers.OrderSign("CourseType", ViewBag._CurrentSort)</th>
+                    <th>@Html.ActionLink("จำนวนเงิน", "Index", new { currentFilter = ViewBag._CurrentFilter, sortOrder = ViewBag._CourseTypeSort }, new { title = "เรียงตาม" }) @InlineHelpers.OrderSign("CourseType", ViewBag._CurrentSort)</th>
+                    <th>@Html.ActionLink("ผู้ประสานงาน", "Index", new { currentFilter = ViewBag._CurrentFilter, sortOrder = ViewBag._CourseTypeSort }, new { title = "เรียงตาม" }) @InlineHelpers.OrderSign("CourseType", ViewBag._CurrentSort)</th>
+                    <th class="text-center">สถานะ</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    @*<tr data-id="@(item.Id)">
+                            <td class="ss-select"><input class="ss-checkboxes" type="checkbox"></td>
+                            <td>
+                                @Html.ActionLink(item.CreationDate, "Edit", new { id = item.Id })
+                                @if (item.Active)
+                                { <span class="label label-sm bg-blue-mtl">Open</span> }
+                                else
+                                { <span class="label label-sm bg-gray-mtl">Closed</span> }
+                            </td>
+                            <td>@item.Name</td>
+                            <td>@item.CourseType.Name</td>
+                            <td class="text-center"><span class="badge badge-primary">@item.PositionCount</span></td>
+                        </tr>*@
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="ss-pager-bottom-panel col-md-12">
+            <div class="ss-table-summary pull-left"><strong>@string.Format("{0:#,##0}", @Model.Count())</strong> รายการ</div>
+        </div>
+    </div>
+</div>

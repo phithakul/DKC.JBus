@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace DKC.JBus.Models
+namespace DKC.JBus.Domains
 {
     public enum MailType
     {

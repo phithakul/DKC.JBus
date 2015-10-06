@@ -1,8 +1,10 @@
 ﻿using DKC.JBus.Constants;
 using DKC.JBus.Controllers;
-using DKC.JBus.Models;
+using DKC.JBus.Domains;
+using StackExchange.Profiling;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
@@ -77,9 +79,11 @@ namespace DKC.JBus
 
                 if (result == null)
                 {
-                    DbConnection cnn = new SqlConnection(Application.ConnectionStrings);
-                    //if (Current.Profiler != null)
-                    //    cnn = new StackExchange.Profiling.Data.ProfiledDbConnection(cnn, new ErrorLoggingProfiler(Current.Profiler));
+                    DbConnection cnn = new SqlConnection(Application.ConnectionString);
+                    if (Profiler != null)
+                        cnn = new StackExchange.Profiling.Data.ProfiledDbConnection(cnn, new ErrorLoggingProfiler(Profiler));
+                    //if (Profiler != null)
+                    //    cnn = new StackExchange.Profiling.Data.ProfiledDbConnection(cnn, Profiler);
                     cnn.Open();
                     result = AppDatabase.Init(cnn, 30);
                     if (Context != null)
@@ -220,6 +224,14 @@ namespace DKC.JBus
                 TimeSpan.FromSeconds(durationSecs),
                 CacheItemPriority.High,
                 null);
+        }
+
+        public static StackExchange.Profiling.MiniProfiler Profiler
+        {
+            get
+            {
+                return StackExchange.Profiling.MiniProfiler.Current;
+            }
         }
     }
 }

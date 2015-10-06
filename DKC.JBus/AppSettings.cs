@@ -33,7 +33,10 @@ namespace DKC.JBus
         public static string HttpProxyPassword { get; set; }
 
         [Default("")]
-        public static string BizboxVdoUrl { get; set; }
+        public static string DomainControllerIP { get; set; }
+
+        [Default("")]
+        public static string DomainName { get; set; }
 
         public static void Refresh()
         {

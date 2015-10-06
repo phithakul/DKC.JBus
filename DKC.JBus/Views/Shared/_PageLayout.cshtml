@@ -1,0 +1,38 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //ViewBag._BodyClass = "page-header-menu-fixed page-header-top-fixed";
+    ViewBag._BodyClass = "";
+}
+@section PagePluginStyle {
+    @RenderSection("PagePluginStyle", required: false)
+}
+@section css {
+    @RenderSection("css", required: false)
+}
+@RenderSection("modal", required: false)
+@Html.Partial("_PageHeader")
+@RenderBody()
+@if (ViewBag._ShowPreFooter != null && ViewBag._ShowPreFooter)
+{
+    <!-- BEGIN PRE-FOOTER -->
+    <div class="page-prefooter">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-xs-12 footer-block">
+                    <h2>ติดต่อ</h2>
+                    <address class="margin-bottom-40">
+                        โทรศัพท์: 083-5405028<br>
+                        Email: <a href="mailto:info@metronic.com">info@traffic.com</a>
+                    </address>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PRE-FOOTER -->
+}
+@section PagePluginScript {
+    @RenderSection("PagePluginScript", required: false)
+}
+@section js {
+    @RenderSection("js", required: false)
+}

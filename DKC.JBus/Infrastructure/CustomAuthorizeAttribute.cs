@@ -1,4 +1,5 @@
-﻿using DKC.JBus.Models;
+﻿using DKC.JBus.Domains;
+using Elmah;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,11 +39,13 @@ namespace DKC.JBus.Infrastructure
         {
             if (filterContext.HttpContext.Request.IsAuthenticated)
             {
-                Elmah.ErrorSignal.FromCurrentContext().Raise(new HttpException(403, "403 Forbidden - " + filterContext.RequestContext.HttpContext.Request.RawUrl), System.Web.HttpContext.Current);
+                // TODO:
+                ErrorSignal.FromCurrentContext().Raise(new HttpException(403, "403 Forbidden - " + filterContext.RequestContext.HttpContext.Request.RawUrl), System.Web.HttpContext.Current);
             }
             else
             {
-                Elmah.ErrorSignal.FromCurrentContext().Raise(new HttpException(401, "401 Unauthorized - " + filterContext.RequestContext.HttpContext.Request.RawUrl), System.Web.HttpContext.Current);
+                // TODO:
+                ErrorSignal.FromCurrentContext().Raise(new HttpException(401, "401 Unauthorized - " + filterContext.RequestContext.HttpContext.Request.RawUrl), System.Web.HttpContext.Current);
             }
 
             if (filterContext.HttpContext.Request.IsAjaxRequest())

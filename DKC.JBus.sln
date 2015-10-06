@@ -7,6 +7,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DKC.JBus", "DKC.JBus\DKC.JB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migrator", "Migrator\Migrator.csproj", "{B6ED1AED-608A-4E73-9019-921D97D414F2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_scripts", "_scripts", "{E09C84AB-19FC-4646-86E9-1C046F3FE4E7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "local", "local", "{D45C929E-3F0B-48D2-986D-8EB50D88D0F5}"
+	ProjectSection(SolutionItems) = preProject
+		_scripts\local\local.create_database.bat = _scripts\local\local.create_database.bat
+		_scripts\local\local.create_database.sql = _scripts\local\local.create_database.sql
+		_scripts\local\local.drop_all_table.bat = _scripts\local\local.drop_all_table.bat
+		_scripts\local\local.drop_all_table.sql = _scripts\local\local.drop_all_table.sql
+		_scripts\local\local.drop_database.bat = _scripts\local\local.drop_database.bat
+		_scripts\local\local.drop_database.sql = _scripts\local\local.drop_database.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +36,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D45C929E-3F0B-48D2-986D-8EB50D88D0F5} = {E09C84AB-19FC-4646-86E9-1C046F3FE4E7}
 	EndGlobalSection
 EndGlobal

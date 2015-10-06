@@ -1,4 +1,10 @@
-﻿<!doctype html>
+﻿@{
+//var profiler = MiniProfiler.Current;
+
+//// allows us to test out starting a profiler hidden - use ALT + P to toggle display of results
+//var startHidden = !string.IsNullOrEmpty(Request.QueryString["startHidden"]);
+}
+<!doctype html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!-->
@@ -9,31 +15,9 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="~/assets/home/img/favicon.ico">
-    <link rel="apple-touch-icon" href="~/assets/home/img/apple-touch-icon.png">
+    <link rel="shortcut icon" href="~/assets/app/img/favicon.ico">
+    @*<link rel="apple-touch-icon" href="~/assets/home/img/apple-touch-icon.png">*@
     <title>@ViewBag._Title</title>
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700">
-    @*<!-- BEGIN GLOBAL MANDATORY STYLES -->
-    <link rel="stylesheet" href="~/assets/global/plugins/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="~/assets/global/plugins/simple-line-icons/simple-line-icons.min.css">
-    <link rel="stylesheet" href="~/assets/global/plugins/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="~/assets/global/plugins/bootstrap-combobox/bootstrap-combobox.css">
-    <link rel="stylesheet" href="~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.css">
-    <!-- END GLOBAL MANDATORY STYLES -->
-    <!-- BEGIN PAGE LEVEL STYLES -->
-    <link rel="stylesheet" href="~/assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css">
-    <link rel="stylesheet" href="~/assets/global/plugins/bootstrap-modal/css/bootstrap-modal.css">
-    <link rel="stylesheet" href="~/assets/global/plugins/icheck/skins/all.css">
-    @RenderSection("PagePluginStyle", required: false)
-    <!-- END PAGE LEVEL STYLES -->
-    <!-- BEGIN THEME STYLES -->
-    <link rel="stylesheet" href="~/assets/global/css/components.css">
-    <link rel="stylesheet" href="~/assets/global/css/plugins.css">
-
-    <link rel="stylesheet" href="~/assets/admin/layout/css/layout.css">
-    <link rel="stylesheet" href="~/assets/admin/layout/css/themes/light.css">
-    <link rel="stylesheet" href="~/assets/admin/layout/css/custom.css">
-    <!-- END THEME STYLES -->*@
     @Styles.Render("~/bundle/global-styles")
     @RenderSection("PagePluginStyle", required: false)
     @Styles.Render("~/bundle/theme-styles")
@@ -41,40 +25,20 @@
     @RenderSection("css", required: false)
 </head>
 <body class="@ViewBag._BodyClass">
-    @RenderSection("modal", required: false)
     <!--[if lt IE 9]>
        <p class="browsehappy">คุณใช้เบราว์เซอร์ที่ล้าสมัย ทำให้<strong>แสดงผลไม่ถูกต้อง</strong><br>โปรด<a href="http://browsehappy.com/">อัปเกรดเบราว์เซอร์ของคุณก่อนใช้งานโปรแกรม !!</a></p>
     <![endif]-->
     @RenderBody()
     <!-- BEGIN JAVASCRIPTS -->
-    <!-- BEGIN CORE PLUGINS -->
     <!--[if lt IE 9]>
-    <script src="~/assets/global/plugins/respond.min.js"></script>
-    <script src="~/assets/global/plugins/excanvas.min.js"></script>
+    <script src="../../assets/global/plugins/respond.min.js"></script>
+    <script src="../../assets/global/plugins/excanvas.min.js"></script>
     <![endif]-->
-    @*<script src="~/assets/global/plugins/jquery.min.js"></script>
-    <script src="~/assets/global/plugins/jquery-migrate.min.js"></script>*@@*
-        <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-        <script src="~/assets/global/plugins/jquery-ui/jquery-ui.min.js"></script>
-    *@@*<script src="~/assets/global/plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script src="~/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
-    <script src="~/assets/global/plugins/jquery.blockui.min.js"></script>
-    <script src="~/assets/global/plugins/bootstrap-combobox/bootstrap-combobox-custom.js"></script>
-    <script src="~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker-custom.js"></script>
-    <script src="~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.th.min.js"></script>
-    <!-- END CORE PLUGINS -->
-    <!-- BEGIN PAGE LEVEL PLUGINS -->
-    <script src="~/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js"></script>
-    <script src="~/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js"></script>
-    <script src="~/assets/global/plugins/icheck/icheck.min.js"></script>
-    @RenderSection("PagePluginScript", required: false)
-    <!-- END PAGE LEVEL PLUGINS -->
-    <script src="~/assets/global/scripts/metronic.js"></script>
-    <script src="~/assets/admin/layout/scripts/layout.js"></script>*@
     @Scripts.Render("~/bundle/global-scripts")
     @RenderSection("PagePluginScript", required: false)
     @Scripts.Render("~/bundle/theme-scripts")
     @RenderSection("js", required: false)
     <!-- END JAVASCRIPTS -->
+    @StackExchange.Profiling.MiniProfiler.RenderIncludes()    
 </body>
 </html>

@@ -12,6 +12,7 @@ namespace DKC.JBus
             filters.Add(new CustomAuthorizeAttribute());
             //filters.Add(new HandleErrorAttribute()); // ให้ elmah add แทน
             filters.Add(new NoCacheAttribute());
+            filters.Add(new HandleAntiForgeryError());
             //filters.Add(new RequireHttpsAttribute());
         }
     }

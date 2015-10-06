@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using DKC.JBus.ViewModels;
+using DKC.JBus.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
-namespace DKC.JBus.Models
+namespace DKC.JBus.Domains
 {
     public class AppSetting
     {

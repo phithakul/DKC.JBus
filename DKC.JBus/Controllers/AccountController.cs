@@ -1,7 +1,9 @@
 ﻿using DKC.JBus.Constants;
+using DKC.JBus.Domains;
+using DKC.JBus.Helpers;
+using DKC.JBus.Helpers.Security;
 using DKC.JBus.Infrastructure;
 using DKC.JBus.Models;
-using DKC.JBus.ViewModels;
 using System;
 using System.Security.Principal;
 using System.Web;
@@ -18,6 +20,10 @@ namespace DKC.JBus.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if (Request.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             FormsAuthentication.SignOut();
             this.HttpContext.User = new GenericPrincipal(new GenericIdentity(""), null);
             return View("Login", new LoginViewModel());
@@ -25,7 +31,6 @@ namespace DKC.JBus.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        [HandleAntiForgeryError]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel model)
         {
@@ -34,38 +39,38 @@ namespace DKC.JBus.Controllers
                 return View("Login", model);
             }
 
-            string errorMsg;
-            var user = Models.User.Authenticate(model.Username, model.Password, out errorMsg);
-            if (user == null)
+            User user = null;
+            try
             {
-                if (errorMsg != "")
+#if !DEBUG
+                if (!ActiveDirectory.AuthenticateUser(model.Username, model.Password))
                 {
-                    ModelState.AddModelError("Username", errorMsg);
+                    return ErrorLogin(model, "รหัสผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
                 }
-                else
+#endif
+                user = HRService.GetUser(model.Username);
+                if (user == null)
                 {
-                    ModelState.AddModelError("Username", "รหัสผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!");
+                    return ErrorLogin(model, "ไม่พบข้อมูลรหัสผู้ใช้นี้ในฐานข้อมูลบุคคล");
                 }
-                return View("Login", model);
+                user = Domains.User.CreateLoginUser(user);
+
+                CreateAuthenCookie(user);
+            }
+            catch (Exception ex)
+            {
+                // TODO:
+                //Current.LogException(ex);
+                return ErrorLogin(model, "Error: " + ex.Message);
             }
 
-            CreateAuthenCookie(user);
+            return RedirectToAction("Index", "Home");
+        }
 
-            switch (user.UserType)
-            {
-                case UserType.Customer:
-                    return RedirectToAction("Index", "");
-
-                case UserType.Manager:
-                case UserType.Officer:
-                    return RedirectToAction("Index", "");
-
-                case UserType.Admin:
-                    return RedirectToAction("Index", "");
-
-                default:
-                    return HttpNotFound();
-            }
+        public ActionResult ErrorLogin(LoginViewModel model, string message)
+        {
+            ModelState.AddModelError("Username", message);
+            return View("Login", model);
         }
 
         private void CreateAuthenCookie(User user)
@@ -98,7 +103,6 @@ namespace DKC.JBus.Controllers
         }
 
         [HttpPost]
-        [HandleAntiForgeryError]
         [ValidateAntiForgeryToken]
         public ActionResult Logout()
         {

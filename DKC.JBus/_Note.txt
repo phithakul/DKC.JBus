@@ -1,26 +1,7 @@
-﻿การ Compile Views in ASP.NET MVC
-1. edit ไฟล์ .csproj
-2. เช็ค MvcBuildViews ใน PropertyGroup ของแต่ละ configuration ที่ต้องการ
-เช่น กำหนดเฉพาะ release ไม่กำหนดใน debug เพราะช้า
-ถ้าไม่มีให้เพิ่ม tag นี้ <MvcBuildViews>true</MvcBuildViews>
-และกำหนดค่าเป็น true
-3. กรณีใช้ TFS ให้กำหนดที่ท้ายไฟล์ ดังนี้
-  <Target Name="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
-    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
-  </Target>
-  http://haacked.com/archive/2011/05/09/compiling-mvc-views-in-a-build-environment.aspx/
-  http://stackoverflow.com/questions/383192/compile-views-in-asp-net-mvc
-  http://stackoverflow.com/questions/755645/asp-net-mvc-1-0-afterbuilding-views-fails-on-tfs-build/2670792#2670792
-  http://blogs.msdn.com/b/jimlamb/archive/2010/04/20/turn-on-compile-time-view-checking-for-asp-net-mvc-projects-in-tfs-build-2010.aspx
+﻿
+VOID = the document was not intended to be made live. Mark the document VOID.
+OBSELETE = the document is no longer required and no further revisions will ever be required.
+CANCELLED = the document has been stopped and another document should be released to replace it.
+SUPERCEDED = the document has been updated/amended with a new revision. Move the Superceded document to an electronic file named Superceded and make sure all copies of the original document are stamped or marked SUPERCEDED to ensure they are not used in the field.
 
---------------------------------------------------------------------
-
-ลบ obj folder & bin folder เพื่อไม่ให้ error เวลา build *** เฉพาะ release
-- เพิ่ม tag ที่ท้ายไฟล์
-  <Target Name="BeforeBuild" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <!-- Remove obj folder -->
-    <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
-    <!-- Remove bin folder -->
-    <RemoveDir Directories="$(BaseOutputPath)" />
-  </Target>
-
+I would suggest you never remove any of these documents - it's always best to maintain a history trail.

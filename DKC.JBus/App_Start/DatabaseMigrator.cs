@@ -15,7 +15,7 @@ namespace DKC.JBus
         {
             var config = new Config
             {
-                ConnectionString = Application.ConnectionStrings,
+                ConnectionString = Application.ConnectionString,
                 MigrationPath = System.Web.Hosting.HostingEnvironment.MapPath("~/Migrations"),
                 Force = true,
                 CommandTimeout = 5 * 60
@@ -45,6 +45,7 @@ namespace DKC.JBus
             {
                 logger.Error("ERROR OCCURRED WHEN RUNNING MIGRATIONS:");
                 logger.Error(e);
+                throw new ApplicationException("Failed to run migration: " + e.Message);
             }
             finally
             {

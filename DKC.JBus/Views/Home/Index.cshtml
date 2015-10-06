@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+    ViewBag._Title = string.Format("หน้าหลัก | {0}", Application.Name);
+    ViewBag._MainMenu = "หน้าหลัก";
+    ViewBag._SubMenu = "หน้าหลัก";
+    ViewBag._PageTitle = "Home";
+    //ViewBag._ShowPreFooter = true;
+    ViewBag._UserType = Current.User.UserType;
+}
+<!-- BEGIN PAGE CONTENT INNER -->
+<div class="row">
+    <div class="col-md-12">
+    </div>
+</div>
+<!-- END PAGE CONTENT INNER -->
+@section js
+{
+    <script>
+        jQuery(document).ready(function () {
+            Metronic.init();
+            Layout.init();
+        });
+    </script>
+}

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace DKC.JBus.ViewModels
+namespace DKC.JBus.Models
 {
     public class LoginViewModel
     {

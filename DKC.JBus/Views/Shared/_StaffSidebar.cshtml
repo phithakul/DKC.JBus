@@ -1,0 +1,105 @@
+﻿@{
+    string mainMenu = ViewBag._MainMenu;
+    string subMenu = ViewBag._SubMenu;
+}
+<!-- BEGIN SIDEBAR -->
+<div class="page-sidebar-wrapper">
+    <div class="page-sidebar navbar-collapse collapse">
+        <!-- BEGIN SIDEBAR MENU -->
+        <ul class="page-sidebar-menu page-sidebar-menu-light" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+            <li class="sidebar-toggler-wrapper">
+            </li>
+            <li class="sidebar-search-wrapper">
+            </li>
+            <li class="start @(mainMenu == "หน้าหลัก" ? "active open" : "")">
+                <a href="@Url.Action("Index", "Home")">
+                    <i class="icon-home"></i>
+                    <span class="title">หน้าหลัก</span>
+                    @if (mainMenu == "หน้าหลัก")
+                    {
+                        <span class="selected"></span>
+                    }
+                </a>
+            </li>
+            <li class="@(mainMenu == "ใบจองรถ" ? "active open" : "")">
+                <a href="">
+                    <i class="icon-docs"></i>
+                    <span class="title">ใบจองรถ</span>
+                    @if (mainMenu == "ใบจองรถ")
+                    {
+                        <span class="selected"></span>
+                    }
+                </a>
+            </li>
+            <li class="@(mainMenu == "ใบเช่ารถ" ? "active open" : "")">
+                <a href="">
+                    <i class="icon-docs"></i>
+                    <span class="title">ใบเช่ารถ</span>
+                    @if (mainMenu == "ใบเช่ารถ")
+                    {
+                        <span class="selected"></span>
+                    }
+                </a>
+            </li>
+            <li class="@(mainMenu == "รายการชำระเงิน" ? "active open" : "")">
+                <a href="">
+                    <i class="icon-wallet"></i>
+                    <span class="title">รายการชำระเงิน</span>
+                    @if (mainMenu == "รายการชำระเงิน")
+                    {
+                        <span class="selected"></span>
+                    }
+                </a>
+            </li>
+            <li class="@(mainMenu == "ใบส่งกองคลัง" ? "active open" : "")">
+                <a href="">
+                    <i class="icon-notebook"></i>
+                    <span class="title">ใบส่งกองคลัง</span>
+                    @if (mainMenu == "ใบส่งกองคลัง")
+                    {
+                        <span class="selected"></span>
+                    }
+                </a>
+            </li>
+            <li class="@(mainMenu == "รายงาน" ? "active open" : "")">
+                <a href="">
+                    <i class="icon-graph"></i>
+                    <span class="title">รายงาน</span>
+                    @if (mainMenu == "รายงาน")
+                    {
+                        <span class="selected"></span>
+                    }
+                </a>
+            </li>
+            <li class="last @(mainMenu == "ข้อมูล" ? "active open" : "")">
+                <a href="javascript:;">
+                    <i class="icon-folder"></i>
+                    <span class="title">ข้อมูล</span>
+                    @if (mainMenu == "ข้อมูล")
+                    {
+                        <span class="selected"></span>
+                        <span class="arrow open"></span>
+                    }
+                    else
+                    {
+                        <span class="arrow"></span>
+                    }
+                </a>
+                <ul class="sub-menu">
+                    <li class="@(subMenu == "บริษัทรถ" ? "active" : "")">
+                        <a href="">
+                            บริษัทรถ
+                        </a>
+                    </li>
+                    <li class="@(subMenu == "ผู้ใช้งาน" ? "active" : "")">
+                        <a href="@Url.Action("Index", "User")">
+                            ผู้ใช้งาน
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <!-- END SIDEBAR MENU -->
+    </div>
+</div>
+<!-- END SIDEBAR -->

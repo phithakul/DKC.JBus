@@ -1,0 +1,40 @@
+﻿IF OBJECT_ID('dbo.Courses', 'U') IS NULL 
+BEGIN 
+	CREATE TABLE [dbo].[Courses]
+	(
+    Id 					int 					not null identity,
+		Code					nvarchar(5)		not null,
+		Name				nvarchar(100) 	not null,
+		CourseTypeId		int					not null,		
+		Note			 		nvarchar(200) 	not null,
+		Active	 			bit 					not null,		
+		CONSTRAINT PK_Courses PRIMARY KEY(Id)
+	);
+	CREATE UNIQUE INDEX UX_Code ON [dbo].[Courses](Code);
+END
+go
+
+IF OBJECT_ID('dbo.CourseTypes', 'U') IS NULL 
+BEGIN 
+	CREATE TABLE [dbo].[CourseTypes]
+	(
+    Id 					int 					not null identity,
+		Name			nvarchar(50) 		not null,
+		CONSTRAINT PK_CourseTypes PRIMARY KEY(Id)
+	);
+	CREATE UNIQUE INDEX UX_Name ON [dbo].[CourseTypes](Name);
+END
+go
+
+IF OBJECT_ID('dbo.CoursePositions', 'U') IS NULL 
+BEGIN 
+	CREATE TABLE [dbo].[CoursePositions]
+	(
+    Id 					int 					not null identity,
+		CourseId		int					not null,
+		PositionId		int					not null,
+		CONSTRAINT PK_CoursePositions PRIMARY KEY(Id)
+	);
+	CREATE UNIQUE INDEX UX_CoursePosition ON [dbo].[CoursePositions](CourseId, PositionId);
+END
+go
