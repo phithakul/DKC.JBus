@@ -1,0 +1,48 @@
+﻿@model IEnumerable<JBus.Web.ViewModels.BusOperatorViewModel>
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+}
+
+<h2>View</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Phone</th>
+			<th>Email</th>
+			<th>BankAcctName</th>
+			<th>BankAcctNo</th>
+			<th>BankName</th>
+			<th>BankBranch</th>
+			<th>Contact</th>
+			<th>Note</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+@foreach (var item in Model) {
+		<tr>
+			<td>@item.Name</td>
+			<td>@item.Phone</td>
+			<td>@item.Email</td>
+			<td>@item.BankAcctName</td>
+			<td>@item.BankAcctNo</td>
+			<td>@item.BankName</td>
+			<td>@item.BankBranch</td>
+			<td>@item.Contact</td>
+			<td>@item.Note</td>
+			<td>
+				@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+				@Html.ActionLink("Details", "Details", new { id=item.Id }) |
+				@Html.ActionLink("Delete", "Delete", new { id=item.Id })
+			</td>
+		</tr>
+}
+	</tbody>
+</table>

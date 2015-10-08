@@ -1,0 +1,35 @@
+﻿@model IEnumerable<JBus.Web.ViewModels.BusOperatorViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@*<table class="table table-hover">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Enhancements</th>
+                <th>Bugs</th>
+                <th>Support</th>
+                <th>Other</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stat in Model)
+            {
+                <tr>
+                    <td>@stat.UserName</td>
+                    <td>@stat.Enhancements</td>
+                    <td>@stat.Bugs</td>
+                    <td>@stat.Support</td>
+                    <td>@stat.Other</td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
